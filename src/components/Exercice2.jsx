@@ -1,9 +1,35 @@
+import { useState, useEffect } from "react";
 import Exercice from "./container/Exercice";
 
 export default function Exercice2() {
-  // 1. Créez une fonction qui récupère une valeur sauvegardée dans localStorage.
-  // 2. Utilisez `localStorage.getItem` pour récupérer cette valeur.
-  // 3. Affichez cette valeur.
+  // 1. Utilisation du state pour stocker la valeur du compteur
+  const [count, setCount] = useState(0);
+
+  // 2. Utilisation de useEffect pour récupérer la valeur du localStorage lors du premier rendu
+  useEffect(() => {
+    const storedCount = localStorage.getItem("count");
+    if (storedCount) {
+      setCount(parseInt(storedCount, 10));
+    }
+  }, []);
+
+  // 3. Fonction pour gérer l'incrémentation
+  const plus = () => {
+    setCount(prevCount => {
+      const newCount = prevCount + 1;
+      localStorage.setItem("count", newCount);
+      return newCount;
+    });
+  };
+
+  // 4. Fonction pour gérer la décrémentation
+  const moins = () => {
+    setCount(prevCount => {
+      const newCount = prevCount - 1;
+      localStorage.setItem("count", newCount);
+      return newCount;
+    });
+  };
 
   return (
     <Exercice>
@@ -15,9 +41,14 @@ export default function Exercice2() {
       </p>
       <div className="solution">
         <div>
-          <button>-</button>
-          <button>+</button>
-          <p>Compteur : 0</p>
+          {/* Bouton pour diminuer le compteur */}
+          <button onClick={moins}>-</button>
+          
+          {/* Bouton pour augmenter le compteur */}
+          <button onClick={plus}>+</button>
+
+          {/* Affichage du compteur */}
+          <p>Compteur : {count}</p>
         </div>
       </div>
     </Exercice>

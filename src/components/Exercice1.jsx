@@ -1,15 +1,28 @@
+import { useState, useEffect } from "react";
 import Exercice from "./container/Exercice";
 
 export default function Exercice1() {
-  // 1. Utilisez un state pour stocker la valeur saisie par l'utilisateur.
-  // 2. Utilisez une fonction qui sera appelée lorsqu'une valeur est saisie pour mettre à jour l'état avec la valeur du champ de saisie.
-  // 3. Utilisez `localStorage.setItem` pour enregistrer la valeur dans localStorage lorsque l'utilisateur saisit une nouvelle valeur.
-  // 4. Utilisez `useEffect` pour récupérer la valeur initiale du localStorage avec `localStorage.getItem` lors du premier rendu
-  //    et mettre à jour l'état avec cette valeur.
+  // 1. Utilisation de useState pour stocker la valeur de l'input
+  const [value, setValue] = useState("");
+
+  // 2. Récupération de la valeur du localStorage lors du premier rendu avec useEffect
+  useEffect(() => {
+    const storedValue = localStorage.getItem("inputValue");
+    if (storedValue) {
+      setValue(storedValue);
+    }
+  }, []);
+
+  // 3. Fonction pour gérer les changements dans l'input et stocker la valeur dans localStorage
+  const handleInputChange = (e) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+    localStorage.setItem("inputValue", newValue);
+  };
 
   return (
     <Exercice>
-      <h2>Excercie 1 : Stocker le texte dans LocalStorage</h2>
+      <h2>Exercice 1 : Stocker le texte dans LocalStorage</h2>
       <p className="instructions">
         Objectif : Chaque fois que l'utilisateur tape dans le champ de texte, la
         valeur doit être sauvegardée dans le LocalStorage. Lorsque l'utilisateur
@@ -18,7 +31,11 @@ export default function Exercice1() {
       </p>
       <div className="solution">
         <div>
-          <input type="text" />
+          <input
+            type="text"
+            value={value} // 4. La valeur de l'input est liée à l'état
+            onChange={handleInputChange} // 5. Appel de la fonction à chaque changement
+          />
         </div>
       </div>
     </Exercice>
